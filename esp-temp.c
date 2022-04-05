@@ -1,7 +1,7 @@
 /*
- * ESP8266 NodeMCU Real Time Graphs Demo
+ * ESP8266 NodeMCU Real Time Dual Data Graph Demo
  * Updates and Gets data from webpage without page refresh
- * https://circuits4you.com
+ * based on something from https://circuits4you.com
  */
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -18,7 +18,7 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 //SSID and Password of your WiFi router
-const char* ssid = "katydid-g";
+const char* ssid = "your-ssid";
 const char* password = "your-password";
 
 ESP8266WebServer server(80); //Server on port 80
@@ -36,10 +36,10 @@ void handleWeatherData() {
   float t = dht.readTemperature();
   //Serial.println("------------");
   //Serial.println(h);
-  String tString = String(t) + "*" + String(h);
+  String tString = String(t) + "*" + String(h); //using delimited data instead of JSON to keep things simple
   //Serial.println(tString);
  
-  server.send(200, "text/plane", tString); //Send ADC value only to client ajax request
+  server.send(200, "text/plane", tString); //Send values only to client ajax request
 }
 //==============================================================
 //                  SETUP
@@ -48,7 +48,7 @@ void setup(void){
   dht.begin();
   Serial.begin(115200);
   
-  WiFi.begin(ssid, NULL);     //Connect to your WiFi router
+  WiFi.begin(ssid, password);     //Connect to your WiFi router
   Serial.println("");
  
   
