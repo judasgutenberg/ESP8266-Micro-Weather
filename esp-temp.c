@@ -21,6 +21,13 @@ DHT dht(DHTPIN, DHTTYPE);
 const char* ssid = "your-ssid";
 const char* password = "your-password";
 
+//data posted to remote server so we can keep a historical record
+//url will be in the form: http://151.236.9.44:80/weather/data.php?data=
+const char* urlGet = "/yourpath/data.php";
+const char* hostGet = "yourbackendserver.com";
+
+bool glblRemote = false;
+
 ESP8266WebServer server(80); //Server on port 80
 
 //===============================================================
@@ -38,12 +45,16 @@ void handleWeatherData() {
   //Serial.println(h);
   String tString = String(t) + "*" + String(h); //using delimited data instead of JSON to keep things simple
   //Serial.println(tString);
- 
-  server.send(200, "text/plane", tString); //Send values only to client ajax request
+  //had to use a global, died a little inside
+  if(glblRemote) {
+    sendRemoteData(tString);
+  } else {
+    server.send(200, "text/plane", tString); //Send values only to client ajax request
+  }
+  //also send it to the website of our choosing:
+  
 }
-//==============================================================
-//                  SETUP
-//==============================================================
+//SETUP----------------------------------------------------
 void setup(void){
   dht.begin();
   Serial.begin(115200);
@@ -67,14 +78,70 @@ void setup(void){
  
   server.on("/", handleRoot);      //Which routine to handle at root location. This is display page
   server.on("/weatherdata", handleWeatherData); //This page is called by java Script AJAX
-
   server.begin();                  //Start server
   Serial.println("HTTP server started");
 }
-//==============================================================
-//                     LOOP
-//==============================================================
+
+//SEND DATA TO A REMOTE SERVER TO STORE IN A DATABASE----------------------------------------------------
+void sendRemoteData(String datastring) {
+  WiFiClient clientGet;
+  const int httpGetPort = 80;
+  //the path and file to send the data to:
+
+  // We now create and add parameters:
+  String src = "ESP";
+  String typ = "flt";
+  String nam = "temp";
+  String vint = "92"; 
+  String url;
+  url =  (String)urlGet + "?data=" + datastring;
+   
+      Serial.print(">>> Connecting to host: ");
+      Serial.println(hostGet);
+      
+       if (!clientGet.connect(hostGet, httpGetPort)) {
+        Serial.print("Connection failed: ");
+        Serial.print(hostGet);
+      } else {
+          clientGet.println("GET " + url + " HTTP/1.1");
+          clientGet.print("Host: ");
+          clientGet.println(hostGet);
+          clientGet.println("User-Agent: ESP8266/1.0");
+          clientGet.println("Connection: close\r\n\r\n");
+          unsigned long timeoutP = millis();
+          while (clientGet.available() == 0) {
+            
+            if (millis() - timeoutP > 10000) {
+              Serial.print(">>> Client Timeout: ");
+              Serial.println(hostGet);
+              clientGet.stop();
+              return;
+            }
+          }
+
+          //just checks the 1st line of the server response. Could be expanded if needed.
+          while(clientGet.available()){
+            String retLine = clientGet.readStringUntil('\r');
+            Serial.println(retLine);
+            break; 
+          }
+      } //end client connection if else             
+      Serial.print(">>> Closing host: ");
+      Serial.println(hostGet);
+      clientGet.stop();
+}
+
+
+
+
+//LOOP----------------------------------------------------
 void loop(void){
+  long nowTime = millis();
+  if(nowTime - ((nowTime/10000)*10000) == 0 ) {  //do it every ten seconds or so
+    glblRemote = true;
+    handleWeatherData();
+    glblRemote = false;
+  }
   //Serial.println(dht.readTemperature());
   server.handleClient();          //Handle client requests
 }
