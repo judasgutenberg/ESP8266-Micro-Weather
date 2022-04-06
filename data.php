@@ -30,9 +30,9 @@ if($_POST) {
 }
 
 $servername = "localhost";
-$username = "weathertron";
-$database = "weathertron";
-$password = "your_password";
+$username = "your-sql-username";
+$database = "your-sql-db";
+$password = "your-sql-password";
 $conn = mysqli_connect($servername, $username, $password, $database);
  
 
@@ -42,6 +42,7 @@ $formatedDateTime =  $date->format('Y-m-d H:i:s');
 
 if($_REQUEST) {
 	$mode = $_REQUEST["mode"];
+	$locationId = $_REQUEST["locationId"];
 	if($mode=="kill") {
     $method  = "kill";
 	
@@ -61,7 +62,7 @@ if($_REQUEST) {
 		}
 		$method  = "read";
 		
-	} else { //save data
+	} else if ($mode == "saveData") { //save data
  
       if(!$conn) {
         $out = ["error"=>"bad database connection"];
@@ -69,8 +70,9 @@ if($_REQUEST) {
         $data = $_REQUEST["data"];
         $arrData = explode("*", $data);
         $temperature = $arrData[0];
-        $humidity = $arrData[1];
-        $sql = "INSERT INTO weather_data(recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES ('" . $formatedDateTime  . "'," . $temperature . ",0," . $humidity . ",0,0,0,0)";
+		$pressure = intval($arrData[1]);
+        $humidity = $arrData[2];
+        $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . $locationId . ",'" .  $formatedDateTime  . "'," . $temperature . "," . $pressure . "," . $humidity . ",0,0,0,0)";
         //echo $sql;
         $result = mysqli_query($conn, $sql);
         $method  = "insert";
