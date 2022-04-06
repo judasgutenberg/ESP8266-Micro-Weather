@@ -4,7 +4,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 
 <head>
   <title>Weather Information</title>
-  <!--Based somewhat on: https://circuits4you.com/2018/03/10/esp8266-jquery-and-ajax-web-server/ -->
+  <!--For offline ESP graphs see this tutorial https://circuits4you.com/2018/03/10/esp8266-jquery-and-ajax-web-server/ -->
   <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>  
   <style>
   canvas{
@@ -12,23 +12,18 @@ const char MAIN_page[] PROGMEM = R"=====(
     -webkit-user-select: none;
     -ms-user-select: none;
   }
-
   /* Data Table Styling */
   #dataTable {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
   }
-
   #dataTable td, #dataTable th {
     border: 1px solid #ddd;
     padding: 8px;
   }
-
   #dataTable tr:nth-child(even){background-color: #f2f2f2;}
-
   #dataTable tr:hover {background-color: #ddd;}
-
   #dataTable th {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -59,7 +54,7 @@ var humidityValues = [];
 var timeStamp = [];
 function showGraph()
 {
-    //this part seems dumb and unnecessary:
+    //this part seems dumb and unnecessary; it pre-loads bogus data:
     /*
     for (i = 0; i < arguments.length; i++) {
       temperatureValues.push(arguments[i]);    
@@ -125,35 +120,35 @@ window.onload = function() {
 
 setInterval(function() {
   // Call a function repetatively with 5 Second interval
-  getData();
-}, 500000); //5000mSeconds update rate
+  getData();}, 50000); //50000mSeconds update rate
  
 function getData() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
      //Push the data in array
-  var time = new Date().toLocaleTimeString();
-  var data = this.responseText; 
-  var arrData = data.split("*");
-  var temperature = arrData[0];
-  var humidity = arrData[1];
-      temperatureValues.push(temperature);
-      humidityValues.push(humidity);
-      timeStamp.push(time);
-      showGraph();  //Update Graphs
-  //Update Data Table
-    var table = document.getElementById("dataTable");
-    var row = table.insertRow(1); //Add after headings
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    var cell3 = row.insertCell(2);
-    cell1.innerHTML = time;
-    cell2.innerHTML = temperature;
-    cell3.innerHTML = humidity;
+      var time = new Date().toLocaleTimeString();
+      var data = this.responseText; 
+      var arrData = data.split("*");
+      var temperature = arrData[0];
+      var pressure = arrData[1];
+      var humidity = arrData[2];
+        temperatureValues.push(temperature);
+        humidityValues.push(humidity);
+        timeStamp.push(time);
+        showGraph();  //Update Graphs
+      //Update Data Table
+      var table = document.getElementById("dataTable");
+      var row = table.insertRow(1); //Add after headings
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      cell1.innerHTML = time;
+      cell2.innerHTML = temperature;
+      cell3.innerHTML = humidity;
     }
   };
-  xhttp.open("GET", "weatherdata", true); //Handle weatherdata server on ESP8266
+  xhttp.open("GET", "weatherdata", true); //Handle readADC server on ESP8266
   xhttp.send();
 }
     
