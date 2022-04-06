@@ -9,7 +9,7 @@
 #include <ESP8266WebServer.h>
 #include <DHT.h>
 
-#include "index.h" //Our HTML webpage contents with javascripts
+#include "index.h" //Our HTML webpage contents with javascript
  
 #define DHTPIN 2 // Digital pin 4//2
 // #define DHTTYPE DHT11 // DHT 11
@@ -22,7 +22,7 @@ const char* ssid = "your-ssid";
 const char* password = "your-password";
 
 //data posted to remote server so we can keep a historical record
-//url will be in the form: http://151.236.9.44:80/weather/data.php?data=
+//url will be in the form: http://your-server.com/weather/data.php?data=
 const char* urlGet = "/weather/data.php";
 const char* hostGet = "your-server"; //where you put the urlGet path and the data.php file
 
