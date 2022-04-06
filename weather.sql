@@ -3,6 +3,7 @@
 
 CREATE TABLE weather_data(
 weather_data_id INT AUTO_INCREMENT PRIMARY KEY,
+location_id INT,
 recorded DATETIME,
 temperature DECIMAL(6,3),
 pressure DECIMAL(9,4),
