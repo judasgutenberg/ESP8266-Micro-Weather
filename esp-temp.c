@@ -1,7 +1,8 @@
 /*
  * ESP8266 NodeMCU Real Time Dual Data Graph 
- * Updates and Gets data from webpage without page refresh
+ * Updates and gets data from webpage without page refresh
  * based on something from https://circuits4you.com
+ * also sends data to a MySQL DB for long-term storage
  * organized and extended by Gus Mueller, April 2022
  */
 #include <ESP8266WiFi.h>
@@ -49,7 +50,7 @@ void handleWeatherData() {
   if(glblRemote) {
     sendRemoteData(tString);
   } else {
-    server.send(200, "text/plane", tString); //Send values only to client ajax request
+    server.send(200, "text/plain", tString); //Send values only to client ajax request
   }
   //also send it to the website of our choosing:
 }
@@ -81,11 +82,6 @@ void setup(void){
 void sendRemoteData(String datastring) {
   WiFiClient clientGet;
   const int httpGetPort = 80;
-  // We now create and add parameters:
-  String src = "ESP";
-  String typ = "flt";
-  String nam = "temp";
-  String vint = "92"; 
   String url;
   url =  (String)urlGet + "?locationId=" + locationId + "&mode=saveData&data=" + datastring;
   Serial.print(">>> Connecting to host: ");
