@@ -7,4 +7,4 @@ as index.h, which holds the code to show pretty graphs in real time directly fro
 
 But this code can also send data to a backend that stores data in a MySQL database.  This is what data.php does.  Place it on a PHP/MySQL web server you control, configure the code in esp-temp.c to point to it in a directory of your choosing (I chose /weather) and configure it to connect to a database by changing the credentials in data.php.  You can create the table using weather.sql.  It produces a table for logging weather data.
 
-So far there is no means to display the stored data, but this will be coming soon.
+Stored MySQL probe data is viewed via index.php on a ChartsJS graph.
