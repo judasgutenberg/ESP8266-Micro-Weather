@@ -1,7 +1,7 @@
 <?php 
-//speakerbot backend. this plays audio via a python script on the server (usually something like a raspberry pi)
+//temperaturebot backend. 
 //i've tried to keep all the code vanilla and old school
-//gus mueller, july 12 2019
+//gus mueller, April 7 2022
 //////////////////////////////////////////////////////////////
  
 
@@ -30,9 +30,9 @@ if($_POST) {
 }
 
 $servername = "localhost";
-$username = "your-sql-username";
-$database = "your-sql-db";
-$password = "your-sql-password";
+$username = "weathertron";
+$database = "weathertron";
+$password = "tron";
 $conn = mysqli_connect($servername, $username, $password, $database);
  
 
@@ -52,12 +52,12 @@ if($_REQUEST) {
 		if(!$conn) {
 			$out = ["error"=>"bad database connection"];
 		} else {
-			$sql = "SELECT * FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY)  ORDER BY weather_data_id   ASC LIMIT 0, 200";
+			$sql = "SELECT * FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " ORDER BY weather_data_id   ASC LIMIT 0, 200";
+			//echo $sql;
 			$result = mysqli_query($conn, $sql);
 			$out = [];
 			while($row = mysqli_fetch_array($result)) {
 				array_push($out, $row);
-			
 			}
 		}
 		$method  = "read";
