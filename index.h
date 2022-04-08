@@ -41,11 +41,19 @@ const char MAIN_page[] PROGMEM = R"=====(
     </div>
 <div>
   <table id="dataTable">
-    <tr><th>Time</th><th>Temperature</th><th>Humidity</th></tr>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Temperature</th>
+        <th>Humidity</th>
+      </tr>
+    </thead>
+    <tbody id='tableBody'>
+    </tbody>
   </table>
 </div>
 <br>
-<br>  
+<br>   
 
 <script>
 //Graphs visit: https://www.chartjs.org
@@ -54,16 +62,6 @@ var humidityValues = [];
 var timeStamp = [];
 function showGraph()
 {
-    //this part seems dumb and unnecessary; it pre-loads bogus data:
-    /*
-    for (i = 0; i < arguments.length; i++) {
-      temperatureValues.push(arguments[i]);    
-    }
-    for (i = 0; i < arguments.length; i++) {
-      humidityValues.push(arguments[i]);    
-    }
-    */
-
     var ctx = document.getElementById("Chart").getContext('2d');
     var Chart2 = new Chart(ctx, {
         type: 'line',
@@ -148,7 +146,7 @@ function getData() {
       cell3.innerHTML = humidity;
     }
   };
-  xhttp.open("GET", "weatherdata", true); //Handle readADC server on ESP8266
+  xhttp.open("GET", "weatherdata", true); //Handle getData server on ESP8266
   xhttp.send();
 }
     
