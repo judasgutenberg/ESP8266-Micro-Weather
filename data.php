@@ -88,7 +88,7 @@ if($_REQUEST) {
 }
 
 
-//CREATE USER 'weathertron'@'localhost' IDENTIFIED  BY 'tron';
+//CREATE USER 'weathertron'@'localhost' IDENTIFIED  BY 'xxxxx';
 //GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'weathertron'@'localhost' WITH GRANT OPTION;
 //GRANT ALL PRIVILEGES ON *.* TO 'weathertron'@'localhost' WITH GRANT OPTION;
  
