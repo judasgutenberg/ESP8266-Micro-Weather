@@ -37,7 +37,9 @@ $storagePassword = "your_storage_password";
 $conn = mysqli_connect($servername, $username, $password, $database);
  
 
-$date = new DateTime("now", new DateTimeZone('America/New_York') ); //might want to change this to your timezone
+
+
+$date = new DateTime("now", new DateTimeZone('America/New_York') );
 $formatedDateTime =  $date->format('Y-m-d H:i:s');
 //$formatedDateTime =  $date->format('H:i');
 
@@ -74,11 +76,11 @@ if($_REQUEST) {
         $pressure = intval($arrData[1]);
         $humidity = $arrData[2];
         $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . 
-          mysql_real_escape_string ($locationId) . ",'" .  
-          mysql_real_escape_string($formatedDateTime)  . "'," . 
-          mysql_real_escape_string($temperature) . "," . 
-          mysql_real_escape_string($pressure) . "," . 
-          mysql_real_escape_string($humidity) . 
+          mysqli_real_escape_string($conn, $locationId) . ",'" .  
+          mysqli_real_escape_string($conn, $formatedDateTime)  . "'," . 
+          mysqli_real_escape_string($conn, $temperature) . "," . 
+          mysqli_real_escape_string($conn, $pressure) . "," . 
+          mysqli_real_escape_string($conn, $humidity) . 
           ",NULL,NULL,NULL,NULL)";
         //echo $sql;
         if($storagePassword == $_REQUEST["storagePassword"]) { //prevents malicious data corruption
@@ -86,15 +88,17 @@ if($_REQUEST) {
         }
         $method  = "insert";
         $out = Array("message" => "done", "method"=>$method);
-  
+  	}
+
     }
-	}
 	echo json_encode($out);
 	
 	
 } else {
 	echo '{"message":"done", "method":"' . $method . '"}';
 }
+
+
 
 
 //CREATE USER 'weathertron'@'localhost' IDENTIFIED  BY 'your_password';
