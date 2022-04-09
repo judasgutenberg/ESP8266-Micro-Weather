@@ -30,13 +30,14 @@ if($_POST) {
 }
 
 $servername = "localhost";
-$username = "weathertron";
-$database = "weathertron";
-$password = "tron";
+$username = "your_sql_user";
+$database = "your_database";
+$password = "your_mysql_password";
+$storagePassword = "your_storage_password";
 $conn = mysqli_connect($servername, $username, $password, $database);
  
 
-$date = new DateTime("now", new DateTimeZone('America/New_York') );
+$date = new DateTime("now", new DateTimeZone('America/New_York') ); //might want to change this to your timezone
 $formatedDateTime =  $date->format('Y-m-d H:i:s');
 //$formatedDateTime =  $date->format('H:i');
 
@@ -70,11 +71,19 @@ if($_REQUEST) {
         $data = $_REQUEST["data"];
         $arrData = explode("*", $data);
         $temperature = $arrData[0];
-	$pressure = intval($arrData[1]);
+        $pressure = intval($arrData[1]);
         $humidity = $arrData[2];
-        $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . $locationId . ",'" .  $formatedDateTime  . "'," . $temperature . "," . $pressure . "," . $humidity . ",0,0,0,0)";
+        $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . 
+          mysql_real_escape_string ($locationId) . ",'" .  
+          mysql_real_escape_string($formatedDateTime)  . "'," . 
+          mysql_real_escape_string($temperature) . "," . 
+          mysql_real_escape_string($pressure) . "," . 
+          mysql_real_escape_string($humidity) . 
+          ",NULL,NULL,NULL,NULL)";
         //echo $sql;
-        $result = mysqli_query($conn, $sql);
+        if($storagePassword == $_REQUEST["storagePassword"]) { //prevents malicious data corruption
+          $result = mysqli_query($conn, $sql);
+        }
         $method  = "insert";
         $out = Array("message" => "done", "method"=>$method);
   
@@ -88,7 +97,7 @@ if($_REQUEST) {
 }
 
 
-//CREATE USER 'weathertron'@'localhost' IDENTIFIED  BY 'xxxxx';
+//CREATE USER 'weathertron'@'localhost' IDENTIFIED  BY 'your_password';
 //GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'weathertron'@'localhost' WITH GRANT OPTION;
 //GRANT ALL PRIVILEGES ON *.* TO 'weathertron'@'localhost' WITH GRANT OPTION;
  
