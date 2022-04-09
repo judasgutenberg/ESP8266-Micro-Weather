@@ -70,7 +70,7 @@ if($_REQUEST) {
         $data = $_REQUEST["data"];
         $arrData = explode("*", $data);
         $temperature = $arrData[0];
-		$pressure = intval($arrData[1]);
+	$pressure = intval($arrData[1]);
         $humidity = $arrData[2];
         $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . $locationId . ",'" .  $formatedDateTime  . "'," . $temperature . "," . $pressure . "," . $humidity . ",0,0,0,0)";
         //echo $sql;
