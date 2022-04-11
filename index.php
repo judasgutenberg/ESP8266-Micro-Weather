@@ -39,6 +39,13 @@
         <canvas id="Chart" width="400" height="400"></canvas>
     </div>
 <div>
+Location: 
+<select id='locationDropdown' onchange="console.log('x');getData(document.getElementById('locationDropdown')[document.getElementById('locationDropdown').selectedIndex].value)">
+<option value='1' >Cabin Upstairs</option>
+<option value='2' >Cabin Downstairs</option>
+
+</select>
+<!--
 	<table id="dataTable">
 		<thead>
 			<tr>
@@ -50,6 +57,7 @@
 		<tbody id='tableBody'>
 		</tbody>
 	</table>
+	-->
 </div>
 <br>
 <br>  
@@ -60,7 +68,7 @@ let temperatureValues = [];
 let humidityValues = [];
 let timeStamp = [];
 
-function showGraph()
+function showGraph(locationId)
 {
 
     var ctx = document.getElementById("Chart").getContext('2d');
@@ -69,7 +77,7 @@ function showGraph()
         data: {
             labels: timeStamp,  //Bottom Labeling
             datasets: [{
-                label: "Temperatures",
+                label: "Temperature",
                 fill: false,  //Try with true
                 backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
@@ -88,7 +96,7 @@ function showGraph()
         options: {
             title: {
                     display: true,
-                    text: "ADC Voltage"
+                    text: "Probe data"
                 },
             maintainAspectRatio: false,
             elements: {
@@ -117,13 +125,15 @@ window.onload = function() {
 //Ajax script to get ADC voltage at every 5 Seconds 
 //Read This tutorial https://circuits4you.com/2018/02/04/esp8266-ajax-update-part-of-web-page-without-refreshing/
 
-setInterval(function() {
+//setInterval(function() {
   // Call a function repetatively with 5 Second interval
-  getData();}, 5000); //50000mSeconds update rate
+  //getData(locationId)
+  //;}, 5000)
+  //; //50000mSeconds update rate
  
-function getData() {
+function getData(locationId) {
   let xhttp = new XMLHttpRequest();
-  let endpointUrl = "http://randomsprocket.com/weather/data.php?mode=getData&locationId=1";
+  let endpointUrl = "http://randomsprocket.com/weather/data.php?mode=getData&locationId=" + locationId;
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
      //Push the data in array
@@ -132,19 +142,22 @@ function getData() {
 		timeStamp = [];
 		let time = new Date().toLocaleTimeString();
 		let dataObject = JSON.parse(this.responseText); 
-		let tbody = document.getElementById("tableBody");
-		tbody.innerHTML = '';
+		//let tbody = document.getElementById("tableBody");
+		//tbody.innerHTML = '';
 		
 		for(let datum of dataObject) {
 			console.log(datum);
-			let time = datum[1];
-			let temperature = datum[2];
+			let time = datum[2];
+			let temperature = datum[3];
 			temperature = temperature * (9/5) + 32;
 			//convert temperature to fahrenheitformula
-			let humidity = datum[4];
+			let pressure = datum[4];
+			let humidity = datum[5];
 			temperatureValues.push(temperature);
 			humidityValues.push(humidity);
 			timeStamp.push(time);
+			
+			/*
 			let row = tbody.insertRow(0); //Add after headings
 			let cell1 = row.insertCell(0);
 			let cell2 = row.insertCell(1);
@@ -152,19 +165,18 @@ function getData() {
 			cell1.innerHTML = time;
 			cell2.innerHTML = temperature;
 			cell3.innerHTML = humidity;
+			*/
 		}
  
-		showGraph();  //Update Graphs
+		showGraph(locationId);  //Update Graphs
 
     }
   };
-  xhttp.open("GET", endpointUrl, true); //Handle readADC server on ESP8266
+  xhttp.open("GET", endpointUrl, true); //Handle getData server on ESP8266
   xhttp.send();
 }
     
 </script>
 </body>
-
 </html>
 
- 
