@@ -36,7 +36,7 @@
 <body>
     <div style="text-align:center;"><b>Weather Information Log</b></div>
     <div class="chart-container" position: relative; height:350px; width:100%">
-        <canvas id="Chart" width="400" height="400"></canvas>
+        <canvas id="Chart" width="400" height="700"></canvas>
     </div>
 <div>
 Location: 
@@ -83,6 +83,7 @@ function showGraph(locationId)
                 backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
                 data: temperatureValues,
+				yAxisID: 'A'
             },
             {
                 label: "Humidity",
@@ -90,6 +91,7 @@ function showGraph(locationId)
                 backgroundColor: 'rgba( 156, 243, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 156, 243, 18 , 1)', //Graph Line Color
                 data: humidityValues,
+				yAxisID: 'A'
             },
             {
             label: "Pressure",
@@ -97,6 +99,7 @@ function showGraph(locationId)
                 backgroundColor: 'rgba( 18, 243, 156 , 1)', //Dot marker color
                 borderColor: 'rgba( 1, 243, 156 , 1)', //Graph Line Color
                 data: pressureValues,
+				yAxisID: 'B'
             },
             
             ],
@@ -113,11 +116,19 @@ function showGraph(locationId)
                 }
             },
             scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
+			  yAxes: [
+			  	{
+			        id: 'A',
+			        type: 'linear',
+			        position: 'left'
+			      }, 
+				  {
+			        id: 'B',
+			        type: 'linear',
+			        position: 'right'
+			 
+	            }
+				]
             }
         }
     });
@@ -165,9 +176,9 @@ function getData(locationId) {
 			let humidity = datum[5];
 			temperatureValues.push(temperature);
 			humidityValues.push(humidity);
-			pressureSkewed = (pressure-950)*5;//so we can see some detail in pressure
+			pressureSkewed = pressure;//so we can see some detail in pressure
 			if(pressure > 0) {
-				pressureValues.push((pressure-950)*5); 
+				pressureValues.push(pressure); 
 			}
 			timeStamp.push(time);
 			
