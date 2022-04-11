@@ -37,8 +37,6 @@ $storagePassword = "your_storage_password";
 $conn = mysqli_connect($servername, $username, $password, $database);
  
 
-
-
 $date = new DateTime("now", new DateTimeZone('America/New_York') );
 $formatedDateTime =  $date->format('Y-m-d H:i:s');
 //$formatedDateTime =  $date->format('H:i');
@@ -55,7 +53,7 @@ if($_REQUEST) {
 		if(!$conn) {
 			$out = ["error"=>"bad database connection"];
 		} else {
-			$sql = "SELECT * FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " ORDER BY weather_data_id   ASC LIMIT 0, 200";
+			$sql = "SELECT * FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " ORDER BY weather_data_id ASC";
 			//echo $sql;
 			$result = mysqli_query($conn, $sql);
 			$out = [];
