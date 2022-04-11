@@ -40,7 +40,7 @@
     </div>
 <div>
 Location: 
-<select id='locationDropdown' onchange="console.log('x');getData(document.getElementById('locationDropdown')[document.getElementById('locationDropdown').selectedIndex].value)">
+<select id='locationDropdown' onmouseup="console.log('x');getData(document.getElementById('locationDropdown')[document.getElementById('locationDropdown').selectedIndex].value)">
 <option value='1' >Cabin Upstairs</option>
 <option value='2' >Cabin Downstairs</option>
 
@@ -66,6 +66,7 @@ Location:
 //Graphs visit: https://www.chartjs.org
 let temperatureValues = [];
 let humidityValues = [];
+let pressureValues = [];
 let timeStamp = [];
 
 function showGraph(locationId)
@@ -89,6 +90,13 @@ function showGraph(locationId)
                 backgroundColor: 'rgba( 156, 243, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 156, 243, 18 , 1)', //Graph Line Color
                 data: humidityValues,
+            },
+            {
+            label: "Pressure",
+                fill: false,  //Try with true
+                backgroundColor: 'rgba( 18, 243, 156 , 1)', //Dot marker color
+                borderColor: 'rgba( 1, 243, 156 , 1)', //Graph Line Color
+                data: pressureValues,
             },
             
             ],
@@ -125,6 +133,7 @@ window.onload = function() {
 //Ajax script to get ADC voltage at every 5 Seconds 
 //Read This tutorial https://circuits4you.com/2018/02/04/esp8266-ajax-update-part-of-web-page-without-refreshing/
 
+getData("<?php echo $_REQUEST["locationId"]?>");
 //setInterval(function() {
   // Call a function repetatively with 5 Second interval
   //getData(locationId)
@@ -139,6 +148,7 @@ function getData(locationId) {
      //Push the data in array
 		temperatureValues = [];
 		humidityValues = [];
+		pressureValues = [];
 		timeStamp = [];
 		let time = new Date().toLocaleTimeString();
 		let dataObject = JSON.parse(this.responseText); 
@@ -155,6 +165,10 @@ function getData(locationId) {
 			let humidity = datum[5];
 			temperatureValues.push(temperature);
 			humidityValues.push(humidity);
+			pressureSkewed = (pressure-950)*5;//so we can see some detail in pressure
+			if(pressure > 0) {
+				pressureValues.push((pressure-950)*5); 
+			}
 			timeStamp.push(time);
 			
 			/*
@@ -178,5 +192,7 @@ function getData(locationId) {
     
 </script>
 </body>
+
 </html>
 
+ 
