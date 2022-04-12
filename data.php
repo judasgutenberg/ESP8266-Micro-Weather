@@ -45,7 +45,7 @@ if($_REQUEST) {
 	$mode = $_REQUEST["mode"];
 	$locationId = $_REQUEST["locationId"];
 	if($mode=="kill") {
-    		$method  = "kill";
+    $method  = "kill";
 	
 	} else if ($_REQUEST["mode"] && $mode=="getData") {
 
@@ -61,12 +61,12 @@ if($_REQUEST) {
 				
 			} else {
 				if($scale == "hour") {
-					$sql = "SELECT *, YEAR(recorded), DAYOFYEAR(recorded), HOUR(recorded) FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " 
+					$sql = "SELECT *, YEAR(recorded), DAYOFYEAR(recorded), HOUR(recorded) FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -7 DAY) AND location_id=" . $locationId . " 
 						GROUP BY YEAR(recorded), DAYOFYEAR(recorded), HOUR(recorded)
 					 	ORDER BY weather_data_id ASC";
 				}
 				if($scale == "day") {
-					$sql = "SELECT *, YEAR(recorded), DAYOFYEAR(recorded) FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " 
+					$sql = "SELECT *, YEAR(recorded), DAYOFYEAR(recorded) FROM " . $database . ".weather_data  WHERE location_id=" . $locationId . " 
 						GROUP BY YEAR(recorded), DAYOFYEAR(recorded)
 					 	ORDER BY weather_data_id ASC";
 				}
@@ -114,9 +114,6 @@ if($_REQUEST) {
 } else {
 	echo '{"message":"done", "method":"' . $method . '"}';
 }
-
-
-
 
 
 
