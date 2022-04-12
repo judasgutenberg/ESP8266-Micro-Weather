@@ -1,5 +1,5 @@
 # ESP8266 Micro Weather
-A soup-to-nuts micro-weather datalogging and visualization suite. This descends genetically from a simple single-plot web-based data visualizer for ESP8266 I found at https://circuits4you.com.
+A soup-to-nuts micro-weather datalogging and visualization suite. This descends genetically from a simple single-plot web-based data visualizer for ESP8266 I found at https://circuits4you.com/2018/02/04/esp8266-ajax-update-part-of-web-page-without-refreshing/.
 
 At this point, this version plots three weather parameters from multiple probes physically located at any number of locations (anywhere with access to WiFi) using graphs that can show three different time scales.
 
@@ -12,4 +12,4 @@ Stored MySQL probe data is viewed via index.php on a ChartsJS graph.  The weathe
 
 I've made it so the backend can store nulls in cases where there are no sensors for a value, which seemed more honest that storing zeros.
 
-This system only enforces permissions for the storing of data.  Anyone can see the data logged at my Adirondack cabin using this system by visiting http://randomsprocket.com/weather
+This system only enforces permissions for the storing of data.  Anyone can see the data logged at my Adirondack cabin using this system by visiting http://randomsprocket.com/weather.
