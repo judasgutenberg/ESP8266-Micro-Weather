@@ -68,7 +68,7 @@ function showGraph()
         data: {
             labels: timeStamp,  //Bottom Labeling
             datasets: [{
-                label: "Temperatures",
+                label: "Temperature",
                 fill: false,  //Try with true
                 backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
@@ -87,7 +87,9 @@ function showGraph()
         options: {
             title: {
                     display: true,
-                    text: "ADC Voltage"
+                    text: "Live Probe Data Served Directly
+                    
+                    "
                 },
             maintainAspectRatio: false,
             elements: {
