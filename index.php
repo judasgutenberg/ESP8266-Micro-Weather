@@ -73,7 +73,7 @@ if(array_key_exists($REQUEST, "locationId")) {
 <div>
 <table id="dataTable">
 <?php 
-//lol, it's easier to specify an object in json and decode it that to specify it in PHP
+//lol, it's easier to specify an object in json and decode it than it is just specify it in PHP
 $selectData = json_decode('[{"text":"Cabin Upstairs","value":1},{"text":"Cabin Downstairs","value":2}]');
 //var_dump($selectData);
 //echo  json_last_error_msg();
