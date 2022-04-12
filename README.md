@@ -1,5 +1,5 @@
 # ESP8266 Micro Weather
-A soup-to-nuts micro-weather datalogging and display suite. This descends genetically from a simple single-plot web-based data visualizer for ESP8266 I found at https://circuits4you.com.
+A soup-to-nuts micro-weather datalogging and visualization suite. This descends genetically from a simple single-plot web-based data visualizer for ESP8266 I found at https://circuits4you.com.
 
 At this point, this version plots three weather parameters from multiple probes physically located at any number of locations (anywhere with access to WiFi) using graphs that can show three different time scales.
 
