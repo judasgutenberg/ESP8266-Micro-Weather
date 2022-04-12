@@ -51,6 +51,7 @@ void handleWeatherData() {
   String tString = "";
   if(useBmp180) {
     //BMP180 code:
+    //this section is kind of a mess; it's what you get when you blindly copy other people's code and try to shoehorn it into your design
     char status;
     double p0,a;
     status = pressure.startTemperature();
