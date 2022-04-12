@@ -1,7 +1,7 @@
 # ESP8266 Micro Weather
 A heavily-modified single-plot web-based data visualizer for ESP8266.
 
-This version plots three weather parameters from multiple probes at any number of locations across using graphs that can show three different time scales.
+This version plots three weather parameters from multiple probes at any number of locations using graphs that can show three different time scales.
 
 The .c file should really be a .ino file -- it is designed to be compiled and uploaded using the Arduino environment.  As such, it should be in the same directory
 as index.h, which holds the code to show pretty graphs in real time directly from an ESP8266 acting as a web server.
