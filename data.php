@@ -35,9 +35,9 @@ $database = "your_database";
 $password = "your_mysql_password";
 $storagePassword = "your_storage_password";
 $conn = mysqli_connect($servername, $username, $password, $database);
- 
 
-$date = new DateTime("now", new DateTimeZone('America/New_York') );
+
+$date = new DateTime("now", new DateTimeZone('America/New_York'));//obviously, you would use your timezone, not necessarily mine
 $formatedDateTime =  $date->format('Y-m-d H:i:s');
 //$formatedDateTime =  $date->format('H:i');
 
@@ -57,22 +57,40 @@ if($_REQUEST) {
 			
 			if($scale == ""  || $scale == "fine") {
 			
-				$sql = "SELECT * FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " ORDER BY weather_data_id ASC";
+				$sql = "SELECT * FROM " . $database . ".weather_data  
+				WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " 
+				ORDER BY weather_data_id ASC";
 				
 			} else {
 				if($scale == "hour") {
-					$sql = "SELECT *, YEAR(recorded), DAYOFYEAR(recorded), HOUR(recorded) FROM " . $database . ".weather_data  WHERE recorded > DATE_ADD(NOW(), INTERVAL -7 DAY) AND location_id=" . $locationId . " 
+					$sql = "SELECT
+					 *,
+					 YEAR(recorded), DAYOFYEAR(recorded), HOUR(recorded) FROM " . $database . ".weather_data  
+					 WHERE recorded > DATE_ADD(NOW(), INTERVAL -7 DAY) AND location_id=" . $locationId . " 
 						GROUP BY YEAR(recorded), DAYOFYEAR(recorded), HOUR(recorded)
 					 	ORDER BY weather_data_id ASC";
 				}
 				if($scale == "day") {
-					$sql = "SELECT *, YEAR(recorded), DAYOFYEAR(recorded) FROM " . $database . ".weather_data  WHERE location_id=" . $locationId . " 
+					$sql = "SELECT 	 
+					*,
+			 		YEAR(recorded), DAYOFYEAR(recorded) FROM " . $database . ".weather_data  
+					WHERE location_id=" . $locationId . " 
 						GROUP BY YEAR(recorded), DAYOFYEAR(recorded)
 					 	ORDER BY weather_data_id ASC";
 				}
 			
 			}
-			
+			/*
+			//using averages didn't work for some reason:
+			weather_data_id, 
+			 recorded, 
+			  AVG(temperature) AS temperature, 
+			  AVG(pressure) AS pressure, 
+			  AVG(humidity) AS humidity, 
+			 wind_direction, 
+			 AVG(precipitation) AS precipitation, 
+			 wind_increment, 
+			 */
 			//echo $sql;
 			$result = mysqli_query($conn, $sql);
 			$out = [];
@@ -114,7 +132,6 @@ if($_REQUEST) {
 } else {
 	echo '{"message":"done", "method":"' . $method . '"}';
 }
-
 
 
 //CREATE USER 'weathertron'@'localhost' IDENTIFIED  BY 'your_password';
