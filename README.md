@@ -10,6 +10,6 @@ But this code can also send data to a backend that stores data in a MySQL databa
 
 Stored MySQL probe data is viewed via index.php on a ChartsJS graph.  The weather_data table has a location_id column to allow for multiple sensors logging from multiple locations.  Be sure to set the locationId appropriately in the Arduino sketch before uploading to your probe.
 
-I've made it so the backend can store nulls in cases where there are no sensors for a value, which seemed more honest that storing zeros.
+I've made it so the backend can store nulls in cases where there are no sensors for a value, which seemed more honest than storing zeros.
 
 This system only enforces permissions for the storing of data.  Anyone can see the data logged at my Adirondack cabin using this system by visiting http://randomsprocket.com/weather.
