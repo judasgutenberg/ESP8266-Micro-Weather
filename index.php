@@ -124,7 +124,7 @@ function showGraph(locationId){
                 backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
                 data: temperatureValues,
-				yAxisID: 'A'
+		yAxisID: 'A'
             },
             {
                 label: "Humidity",
@@ -132,7 +132,7 @@ function showGraph(locationId){
                 backgroundColor: 'rgba( 156, 243, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 156, 243, 18 , 1)', //Graph Line Color
                 data: humidityValues,
-				yAxisID: 'A'
+		yAxisID: 'A'
             },
             {
             label: "Pressure",
@@ -140,7 +140,7 @@ function showGraph(locationId){
                 backgroundColor: 'rgba( 18, 243, 156 , 1)', //Dot marker color
                 borderColor: 'rgba( 1, 243, 156 , 1)', //Graph Line Color
                 data: pressureValues,
-				yAxisID: 'B'
+		yAxisID: 'B'
             },
             
             ],
@@ -159,16 +159,16 @@ function showGraph(locationId){
             scales: {
 			  yAxes: [
 			  	{
-			        id: 'A',
-			        type: 'linear',
-			        position: 'left'
-			      }, 
-				  {
-			        id: 'B',
-			        type: 'linear',
-			        position: 'right'
+					id: 'A',
+					type: 'linear',
+					position: 'left'
+			      	}, 
+				{
+					id: 'B',
+					type: 'linear',
+					position: 'right'
 			 
-	            }
+	           		}
 				]
             }
         }
