@@ -10,24 +10,6 @@
 //error_reporting(E_ALL);
 
 
-function cleanBme280Data($in) {
-	//echo trim($in) ;
-	$arrIn = explode(" ", trim($in));
-	$out = $arrIn[0];
-	return $out;
-}
-
-$file = "";
-$blob = "";
-$mode = "";
-
-if($_REQUEST && $_REQUEST["file"]) {
-	$file = $_REQUEST["file"];
-}
-  
-if($_POST) {
-	$blob = base64_decode(str_replace('^', '+', str_replace("~", "/", $_POST['blob']))); //OMG THESE FUCKING REPLACEMENTS!!!
-}
 
 $servername = "localhost";
 $username = "your_sql_user";
@@ -36,6 +18,7 @@ $password = "your_mysql_password";
 $storagePassword = "your_storage_password";
 $conn = mysqli_connect($servername, $username, $password, $database);
 
+$mode = "";
 
 $date = new DateTime("now", new DateTimeZone('America/New_York'));//obviously, you would use your timezone, not necessarily mine
 $formatedDateTime =  $date->format('Y-m-d H:i:s');
