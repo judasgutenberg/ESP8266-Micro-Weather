@@ -158,17 +158,17 @@ function showGraph(locationId){
             },
             scales: {
 			  yAxes: [
-			  	{
-					id: 'A',
-					type: 'linear',
-					position: 'left'
-			      	}, 
-				{
-					id: 'B',
-					type: 'linear',
-					position: 'right'
-			 
-	           		}
+					{
+						id: 'A',
+						type: 'linear',
+						position: 'left'
+					}, 
+					{
+						id: 'B',
+						type: 'linear',
+						position: 'right'
+
+					}
 				]
             }
         }
