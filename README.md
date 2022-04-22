@@ -12,4 +12,4 @@ Stored MySQL probe data is viewed via index.php on a ChartsJS graph.  The weathe
 
 I've made it so the backend can store nulls in cases where there are no sensors for a value, which is more honest than storing zeros. For some reason the pressure is still stored as zero even when it should be null.
 
-This system only enforces permissions for the storing of data. This is essential for an open source project where I now claim this:  Anyone can see the data logged at my Adirondack cabin using this system by visiting http://randomsprocket.com/weather. (Oh no, the data isn't flowing because the Moxee hotspot I'm using lacks a watchdog to reset it when it gets confused!)
+This system only enforces permissions for the storing of data. This is essential for an open source project where I now claim this:  Anyone can see the data logged at my Adirondack cabin using this system by visiting http://randomsprocket.com/weather. (Oh no, the data isn't flowing because the Moxee hotspot I'm using lacks a watchdog to reset it when it gets confused!  My next project is to make an ESP8266 reboot a hotspot when the internet fails.)
