@@ -14,6 +14,10 @@
 
 include("config.php");
 
+
+$conn = mysqli_connect($servername, $username, $password, $database);
+
+
 $mode = "";
 
 $date = new DateTime("now", new DateTimeZone('America/New_York'));//obviously, you would use your timezone, not necessarily mine
