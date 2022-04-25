@@ -12,12 +12,7 @@
 
 
 
-$servername = "localhost";
-$username = "your_sql_user";
-$database = "your_database";
-$password = "your_mysql_password";
-$storagePassword = "your_storage_password";
-$conn = mysqli_connect($servername, $username, $password, $database);
+include("config.php");
 
 $mode = "";
 
@@ -94,12 +89,17 @@ if($_REQUEST) {
         $temperature = $arrData[0];
         $pressure = intval($arrData[1]);
         $humidity = $arrData[2];
-        $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . 
+		$gasMetric = "NULL";
+		if(count($data)>3) {
+			$gasMetric = $arrData[3];
+		}
+        $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, gas_metric, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . 
           mysqli_real_escape_string($conn, $locationId) . ",'" .  
           mysqli_real_escape_string($conn, $formatedDateTime)  . "'," . 
           mysqli_real_escape_string($conn, $temperature) . "," . 
           mysqli_real_escape_string($conn, $pressure) . "," . 
-          mysqli_real_escape_string($conn, $humidity) . 
+          mysqli_real_escape_string($conn, $humidity) . "," . 
+		   mysqli_real_escape_string($conn, $gasMetric) .
           ",NULL,NULL,NULL,NULL)";
         //echo $sql;
         if($storagePassword == $_REQUEST["storagePassword"]) { //prevents malicious data corruption
