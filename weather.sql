@@ -8,5 +8,6 @@ humidity DECIMAL(6,3) NULL,
 wind_direction INT NULL,
 precipitation INT NULL,
 wind_speed DECIMAL(8,3) NULL,
-wind_increment INT NULL
+wind_increment INT NULL,
+gas_metric DECIMAL(9,4) NULL
 )
