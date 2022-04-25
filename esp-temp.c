@@ -39,7 +39,7 @@ void handleWeatherData() {
   double temperatureValue;
   double pressureValue;
   String transmitString = "";
-  if(true) {
+  if(sensorType == "BMP180") {
     //BMP180 code:
     char status;
     double p0,a;
