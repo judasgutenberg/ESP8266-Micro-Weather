@@ -21,18 +21,8 @@
 #define DHTTYPE DHT21 // DHT 21, AM2301
 DHT dht(DHTPIN, DHTTYPE);
 
-//SSID and Password of your WiFi router
-const char* ssid = "your_wifi_ssid"; //Moxee Hotspot83_2.4G
-const char* password = "your_wifi_password";
-const char* storagePassword = "whatever_you_set_it_to_in_data.php"; //to ensure someone doesn't store bogus data on your server
-const bool useBmp180 = false; //this can read from either a BMP180 or a DHT. set to true or false depending on which you are using
-//data posted to remote server so we can keep a historical record
-//url will be in the form: http://your-server.com:80/weather/data.php?data=
-const char* urlGet = "/weather/data.php";
-const char* hostGet = "your_server.com";
-
-const int locationId = 1; //for storing data from different locations in the backend
-const int secondsGranularity = 300; //how often to store data in the backend in seconds
+//SSID and Password of your WiFi router, among other things, are in here:
+#include "config.h"
 
 bool glblRemote = false;
 ESP8266WebServer server(80); //Server on port 80
@@ -48,10 +38,9 @@ void handleWeatherData() {
   double humidityValue;
   double temperatureValue;
   double pressureValue;
-  String tString = "";
-  if(useBmp180) {
+  String transmitString = "";
+  if(true) {
     //BMP180 code:
-    //this section is kind of a mess; it's what you get when you blindly copy other people's code and try to shoehorn it into your design
     char status;
     double p0,a;
     status = pressure.startTemperature();
@@ -87,19 +76,19 @@ void handleWeatherData() {
       else Serial.println("error retrieving temperature measurement\n");
     }
     else Serial.println("error starting temperature measurement\n");
-    humidityValue = NULL; //really should set unknown values as null
+    humidityValue = 0; //really should set unknown values as null
   } else {
     humidityValue = (double)dht.readHumidity();
     temperatureValue = (double)dht.readTemperature();
-    pressureValue = NULL; //really should set unknown values as null
+    pressureValue = 0; //really should set unknown values as null
   }
-  tString = NullifyOrNumber(temperatureValue) + "*" + NullifyOrNumber(pressureValue) + "*" + NullifyOrNumber(humidityValue); //using delimited data instead of JSON to keep things simple
-  Serial.println(tString);
+  transmitString = NullifyOrNumber(temperatureValue) + "*" + NullifyOrNumber(pressureValue) + "*" + NullifyOrNumber(humidityValue); //using delimited data instead of JSON to keep things simple
+  Serial.println(transmitString);
   //had to use a global, died a little inside
   if(glblRemote) {
-    sendRemoteData(tString);
+    sendRemoteData(transmitString);
   } else {
-    server.send(200, "text/plain", tString); //Send values only to client ajax request
+    server.send(200, "text/plain", transmitString); //Send values only to client ajax request
   }
 }
 
@@ -141,14 +130,13 @@ void sendRemoteData(String datastring) {
   WiFiClient clientGet;
   const int httpGetPort = 80;
   String url;
-  url =  (String)urlGet + "?storagePassword=" + (String)storagePassword + "&locationId=" + locationId + "&mode=saveData&data=" + datastring;
+  url =  (String)urlGet + "?storagePassword=" + storagePassword + "&locationId=" + locationId + "&mode=saveData&data=" + datastring;
   Serial.print(">>> Connecting to host: ");
-  //Serial.println(hostGet);
+  Serial.println(hostGet);
   if (!clientGet.connect(hostGet, httpGetPort)) {
     Serial.print("Connection failed: ");
     Serial.print(hostGet);
   } else {
-      Serial.println(url);
       clientGet.println("GET " + url + " HTTP/1.1");
       clientGet.print("Host: ");
       clientGet.println(hostGet);
