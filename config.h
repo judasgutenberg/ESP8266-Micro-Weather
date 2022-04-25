@@ -9,3 +9,4 @@ const char* hostGet = "your_server.com";
 
 const int locationId = 1; //for storing data from different locations in the backend
 const int secondsGranularity = 300; //how often to store data in the backend in seconds
+String sensorType == "BMP180"; //we can pick between different sensor types
