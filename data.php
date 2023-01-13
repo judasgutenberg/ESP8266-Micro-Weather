@@ -4,19 +4,14 @@
 //of course in php it's all kind of bleh
 //gus mueller, April 7 2022
 //////////////////////////////////////////////////////////////
- 
 
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
-
-
-
+include("./functions.php");
 include("config.php");
 
-
 $conn = mysqli_connect($servername, $username, $password, $database);
-
 
 $mode = "";
 
@@ -24,26 +19,28 @@ $date = new DateTime("now", new DateTimeZone('America/New_York'));//obviously, y
 $formatedDateTime =  $date->format('Y-m-d H:i:s');
 //$formatedDateTime =  $date->format('H:i');
 
+$method = "";
+$out = "";
 if($_REQUEST) {
-	$mode = $_REQUEST["mode"];
-	$locationId = $_REQUEST["locationId"];
+	$mode = gvfw("mode");
+	$locationId = gvfw("locationId");
+	if($locationId == "") {
+		$locationId = 1;
+	}
 	if($mode=="kill") {
     $method  = "kill";
 	
-	} else if ($_REQUEST["mode"] && $mode=="getData") {
+	} else if ($mode=="getData") {
 
  
 		if(!$conn) {
 			$out = ["error"=>"bad database connection"];
 		} else {
-			$scale = $_REQUEST["scale"];
-			
+			$scale = gvfw("scale");
 			if($scale == ""  || $scale == "fine") {
-			
 				$sql = "SELECT * FROM " . $database . ".weather_data  
 				WHERE recorded > DATE_ADD(NOW(), INTERVAL -1 DAY) AND location_id=" . $locationId . " 
 				ORDER BY weather_data_id ASC";
-				
 			} else {
 				if($scale == "hour") {
 					$sql = "SELECT
@@ -61,7 +58,6 @@ if($_REQUEST) {
 						GROUP BY YEAR(recorded), DAYOFYEAR(recorded)
 					 	ORDER BY weather_data_id ASC";
 				}
-			
 			}
 			/*
 			//using averages didn't work for some reason:
@@ -81,32 +77,30 @@ if($_REQUEST) {
 				array_push($out, $row);
 			}
 		}
-		$method  = "read";
-		
+		$method  = "read";	
 	} else if ($mode == "saveData") { //save data
- 
       if(!$conn) {
         $out = ["error"=>"bad database connection"];
       } else {
-        $data = $_REQUEST["data"];
+        $data = gvfw("data");
         $arrData = explode("*", $data);
         $temperature = $arrData[0];
         $pressure = intval($arrData[1]);
         $humidity = $arrData[2];
-	$gasMetric = "NULL";
-	if(count($arrData)>3) {
-		$gasMetric = $arrData[3];
-	}
+        $gasMetric = "NULL";
+        if(count($arrData)>3) {
+          $gasMetric = $arrData[3];
+        }
         $sql = "INSERT INTO weather_data(location_id, recorded, temperature, pressure, humidity, gas_metric, wind_direction, precipitation, wind_speed, wind_increment) VALUES (" . 
           mysqli_real_escape_string($conn, $locationId) . ",'" .  
           mysqli_real_escape_string($conn, $formatedDateTime)  . "'," . 
           mysqli_real_escape_string($conn, $temperature) . "," . 
           mysqli_real_escape_string($conn, $pressure) . "," . 
           mysqli_real_escape_string($conn, $humidity) . "," . 
-		   mysqli_real_escape_string($conn, $gasMetric) .
+          mysqli_real_escape_string($conn, $gasMetric) .
           ",NULL,NULL,NULL,NULL)";
         //echo $sql;
-        if($storagePassword == $_REQUEST["storagePassword"]) { //prevents malicious data corruption
+        if($storagePassword == gvfw("storagePassword")) { //prevents malicious data corruption
           $result = mysqli_query($conn, $sql);
         }
         $method  = "insert";
