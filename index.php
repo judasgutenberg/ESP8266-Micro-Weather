@@ -1,6 +1,6 @@
 <!doctype html>
 <?php 
-
+include("./functions.php");
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
@@ -23,7 +23,7 @@ function genericSelect($id, $name, $defaultValue, $data, $event = "", $handler= 
 	$out.= "</select>";
 	return $out;
 }
-if(array_key_exists($REQUEST, "locationId")) {
+if(array_key_exists( "locationId", $_REQUEST)) {
 	$locationId = $_REQUEST["locationId"];
 } else {
 	$locationId = 1;
@@ -74,7 +74,7 @@ if(array_key_exists($REQUEST, "locationId")) {
 <table id="dataTable">
 <?php 
 //lol, it's easier to specify an object in json and decode it than it is just specify it in PHP
-$selectData = json_decode('[{"text":"Cabin Upstairs","value":1},{"text":"Cabin Downstairs","value":2}]');
+$selectData = json_decode('[{"text":"Cabin Upstairs","value":1},{"text":"Cabin Downstairs","value":2},{"text":"Cabin Watchdog","value":3}]');
 //var_dump($selectData);
 //echo  json_last_error_msg();
 $selectId = "locationDropdown";
@@ -85,7 +85,7 @@ echo "<tr><td>Location:</td><td>" . genericSelect($selectId, "locationId", $loca
 $handler = "getData(document.getElementById('" . $selectId . "')[document.getElementById('" . $selectId  . "').selectedIndex].value)";
 
 $scaleData = json_decode('[{"text":"detailed","value":"fine"},{"text":"hourly","value":"hour"}, {"text":"daily","value":"day"}]');
-echo "<tr><td>Scale:</td><td>" . genericSelect("scaleDropdown", "scale", "fine", $scaleData, "onchange", $handler) . "</td></tr>";
+echo "<tr><td>Time Scale:</td><td>" . genericSelect("scaleDropdown", "scale", "fine", $scaleData, "onchange", $handler) . "</td></tr>";
 ?>
 </table>
 <!--
@@ -124,7 +124,7 @@ function showGraph(locationId){
                 backgroundColor: 'rgba( 243, 156, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 243, 156, 18 , 1)', //Graph Line Color
                 data: temperatureValues,
-		yAxisID: 'A'
+				yAxisID: 'A'
             },
             {
                 label: "Humidity",
@@ -132,7 +132,7 @@ function showGraph(locationId){
                 backgroundColor: 'rgba( 156, 243, 18 , 1)', //Dot marker color
                 borderColor: 'rgba( 156, 243, 18 , 1)', //Graph Line Color
                 data: humidityValues,
-		yAxisID: 'A'
+				yAxisID: 'A'
             },
             {
             label: "Pressure",
@@ -140,7 +140,7 @@ function showGraph(locationId){
                 backgroundColor: 'rgba( 18, 243, 156 , 1)', //Dot marker color
                 borderColor: 'rgba( 1, 243, 156 , 1)', //Graph Line Color
                 data: pressureValues,
-		yAxisID: 'B'
+				yAxisID: 'B'
             },
             
             ],
@@ -158,17 +158,17 @@ function showGraph(locationId){
             },
             scales: {
 			  yAxes: [
-					{
-						id: 'A',
-						type: 'linear',
-						position: 'left'
-					}, 
-					{
-						id: 'B',
-						type: 'linear',
-						position: 'right'
-
-					}
+			  	{
+			        id: 'A',
+			        type: 'linear',
+			        position: 'left'
+			      }, 
+				  {
+			        id: 'B',
+			        type: 'linear',
+			        position: 'right'
+			 
+	            }
 				]
             }
         }
@@ -185,7 +185,7 @@ window.onload = function() {
 //Ajax script to get ADC voltage at every 5 Seconds 
 //Read This tutorial https://circuits4you.com/2018/02/04/esp8266-ajax-update-part-of-web-page-without-refreshing/
 
-getData("<?php echo $_REQUEST["locationId"]?>");
+getData("<?php echo gvfw("locationId")?>");
 //setInterval(function() {
   // Call a function repetatively with 5 Second interval
   //getData(locationId)
