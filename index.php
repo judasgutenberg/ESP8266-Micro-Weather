@@ -146,6 +146,7 @@ function showGraph(locationId){
             ],
         },
         options: {
+            hover: {mode: null},
             title: {
                     display: true,
                     text: "Probe data"
