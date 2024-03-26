@@ -113,8 +113,11 @@ let pressureValues = [];
 let timeStamp = [];
 
 function showGraph(locationId){
-    let ctx = document.getElementById("Chart").getContext('2d');
-    let Chart2 = new Chart(ctx, {
+	if(glblChart){
+		glblChart.destroy();
+	}
+	let ctx = document.getElementById("Chart").getContext('2d');
+	let Chart2 = new Chart(ctx, {
         type: 'line',
         data: {
             labels: timeStamp,  //Bottom Labeling
