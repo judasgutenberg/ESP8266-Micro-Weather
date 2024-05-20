@@ -199,7 +199,7 @@ getData("<?php echo gvfw("locationId")?>");
 function getData(locationId) {
 	let scale = document.getElementById('scaleDropdown')[document.getElementById('scaleDropdown').selectedIndex].value;
 	let xhttp = new XMLHttpRequest();
-	let endpointUrl = "http://randomsprocket.com/weather/data.php?scale=" + scale + "&mode=getData&locationId=" + locationId;
+	let endpointUrl = "./data.php?scale=" + scale + "&mode=getData&locationId=" + locationId;
 	xhttp.onreadystatechange = function() {
 	    if (this.readyState == 4 && this.status == 200) {
 	     //Push the data in array
