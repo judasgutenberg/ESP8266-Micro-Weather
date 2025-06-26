@@ -54,7 +54,6 @@ const char MAIN_page[] PROGMEM = R"=====(
 </div>
 <br>
 <br>   
-
 <script>
 //Graphs visit: https://www.chartjs.org
 var temperatureValues = [];
